@@ -26,7 +26,6 @@ class LoanViewSet(ViewSet):
         storage = FileSystemStorage()
         storage.save(loan_file.name, loan_file)
         storage.save(cashflow_file.name, cashflow_file)
-        print(storage.path(loan_file.name))
         populate_database.delay(
             path_loan=storage.path(loan_file.name), path_cashflow=storage.path(cashflow_file.name))
         return Response("You have uploaded your files")

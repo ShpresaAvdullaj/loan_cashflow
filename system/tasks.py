@@ -38,12 +38,4 @@ def populate_database(path_loan, path_cashflow):
 
     return {"Status": "Database populated"}
 
-# Loan.create(
-#     identifier=row["identifier"],
-#     issue_date=row["issue_date"],
-#     total_amount=row["total_amount"],
-#     rating=row["rating"],
-#     maturity_date=row["maturity_date"],
-#     total_expected_interest_amount=row["total_expected_interest_amount"]
-# )
 
