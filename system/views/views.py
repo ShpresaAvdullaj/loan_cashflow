@@ -13,6 +13,7 @@ from system.filters.loan_filter import LoanFilter
 from system.filters.cashflow_filter import CashFlowFilter
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 from system.tasks import populate_database
 from django.core.files.storage import FileSystemStorage
 
@@ -44,7 +45,7 @@ class LoanViewSet(ViewSet):
         return Response(serializer.data)
 
     @action(detail=False, methods=["GET"])
-    @method_decorator(cache_page(60))
+    # @method_decorator(cache_page(60), name="statistics")
     def statistics_of_investments(self, request):
         number_of_loans = Loan.objects.all().count()
         total_invested_amount = Loan.objects.all().aggregate(Sum("invested_amount"))["invested_amount__sum"]
@@ -56,6 +57,7 @@ class LoanViewSet(ViewSet):
         statistics = {"number_of_loans": number_of_loans, "total_invested_amount": total_invested_amount,
                       "current_invested_amount": current_invested_amount, "total_repaid_amount": total_repaid_amount,
                       "average_realized_irr": average_realized_irr}
+        cache.set(statistics, "statistics")
         return Response(statistics)
 
     @action(detail=False, methods=["DELETE"])

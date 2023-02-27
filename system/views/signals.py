@@ -1,11 +1,16 @@
 # from system.models.loans import Loan
-# from system.models.cashflows import CashFlow
+from system.models.cashflows import CashFlow
 # from django.db.models import Sum
 # from pyxirr import xirr
-# from django.db.models.signals import post_save
-# from django.dispatch import receiver
-#
-#
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.core.cache import cache
+
+
+@receiver(pre_save, sender=CashFlow)
+def invalidate_cache(sender, *args, **kwargs):
+    cache.delete("statistics")
+
 # @receiver(post_save, sender=CashFlow)
 # def get_calculated_fields(sender, instance, *args, **kwargs):
 #     loan = Loan.objects.get(identifier=instance.loan_identifier)

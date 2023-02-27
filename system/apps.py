@@ -6,4 +6,4 @@ class SystemConfig(AppConfig):
     name = 'system'
 
     def ready(self) -> None:
-        pass
+        from system.views import signals

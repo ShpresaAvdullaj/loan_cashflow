@@ -1,13 +1,11 @@
 from system.models.cashflows import CashFlow
-from django_filters import rest_framework as filters
+import django_filters
 
 
-class CashFlowFilter(filters.FilterSet):
-    loan_identifier = filters.CharFilter(field_name="loan_identifier", lookup_expr='exact')
-    amount__lte = filters.NumberFilter(field_name="amount", lookup_expr='lte')
-    amount__gte = filters.NumberFilter(field_name="amount", lookup_expr='gte')
-    amount = filters.NumberFilter(field_name="amount", lookup_expr='exact')
-
+class CashFlowFilter(django_filters.FilterSet):
     class Meta:
         model = CashFlow
-        fields = ['loan_identifier', 'amount__lte', "amount__gte", "amount"]
+        fields = {'loan_identifier': ['exact'],
+                  'amount': ['exact', 'lte', 'gte'],
+                  'type': ['exact', 'contains'],
+                  'reference_date': ['exact', 'lte', 'gte']}
