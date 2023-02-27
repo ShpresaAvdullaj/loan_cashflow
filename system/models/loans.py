@@ -19,11 +19,6 @@ class Loan(models.Model):
     is_closed = models.BooleanField(default=False)
     realized_irr = models.FloatField(default=0)
 
-    # @classmethod
-    # def create(cls, identifier, issue_date, total_amount, rating, maturity_date, total_expected_interest_amount):
-    #     funding = CashFlow.objects.filter(loan_identifier=identifier, type="Funding")
-    #     cls.invested_amount = abs(funding.aggregate(Sum("amount"))["amount__sum"])
-
     def get_calculated_fields(self):
         funding = CashFlow.objects.filter(loan_identifier=self.identifier, type="Funding")
         self.invested_amount = abs(funding.aggregate(Sum("amount"))["amount__sum"])
