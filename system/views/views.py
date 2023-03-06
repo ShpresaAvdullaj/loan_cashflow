@@ -37,7 +37,7 @@ class LoanViewSet(ViewSet):
         serializer = RepaymentCashFlowSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save(loan_identifier=loan.identifier, type="Repayment")
-        loan.get_calculated_fields()
+        loan.calculated_fields()
         loan.expected_irr_calculation()
         loan.is_closed_loan()
         loan.realized_irr_calculation()
@@ -57,7 +57,7 @@ class LoanViewSet(ViewSet):
         statistics = {"number_of_loans": number_of_loans, "total_invested_amount": total_invested_amount,
                       "current_invested_amount": current_invested_amount, "total_repaid_amount": total_repaid_amount,
                       "average_realized_irr": average_realized_irr}
-        cache.set(statistics, "statistics")
+        cache.set("statistics", statistics)
         return Response(statistics)
 
     @action(detail=False, methods=["DELETE"])
