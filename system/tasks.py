@@ -26,7 +26,7 @@ def populate_database(path_loan, path_cashflow):
             rating=row["rating"],
             maturity_date=row["maturity_date"],
             total_expected_interest_amount=row["total_expected_interest_amount"])
-        loan.get_calculated_fields()
+        loan.calculated_fields()
         loan.expected_irr_calculation()
         loan.is_closed_loan()
         loan.realized_irr_calculation()
