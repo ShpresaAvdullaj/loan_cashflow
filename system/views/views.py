@@ -16,6 +16,7 @@ from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 from system.tasks import populate_database
 from django.core.files.storage import FileSystemStorage
+from django.views.decorators.cache import cache_control
 
 
 class LoanViewSet(ViewSet):
@@ -45,6 +46,7 @@ class LoanViewSet(ViewSet):
         return Response(serializer.data)
 
     @action(detail=False, methods=["GET"])
+    @cache_control(private=True)
     # @method_decorator(cache_page(60), name="statistics")
     def statistics_of_investments(self, request):
         number_of_loans = Loan.objects.all().count()
