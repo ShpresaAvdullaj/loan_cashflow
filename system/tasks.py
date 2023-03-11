@@ -4,6 +4,9 @@ from system.models.cashflows import CashFlow
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
 import polars as pl
+from django.db.models import Sum, F
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 @shared_task()
@@ -39,3 +42,23 @@ def populate_database(path_loan, path_cashflow):
     return {"Status": "Database populated"}
 
 
+@shared_task()
+def send_statistics():
+    number_of_loans = Loan.objects.all().count()
+    total_invested_amount = Loan.objects.all().aggregate(Sum("invested_amount"))["invested_amount__sum"]
+    current_invested_amount = Loan.objects.filter(is_closed=False).aggregate(Sum("invested_amount"))[
+        "invested_amount__sum"]
+    total_repaid_amount = CashFlow.objects.filter(type="Repayment").aggregate(Sum("amount"))["amount__sum"]
+    average_realized_irr = Loan.objects.filter(is_closed=True).aggregate(
+        w_avg=Sum(F("invested_amount") * F("realized_irr")) / Sum(F("invested_amount")))["w_avg"]
+
+    statistics = f"number_of_loans: {number_of_loans}, total_invested_amount: {total_invested_amount}," \
+                 f"current_invested_amount: {current_invested_amount}, total_repaid_amount: {total_repaid_amount}," \
+                 f"average_realized_irr: {average_realized_irr}"
+    send_mail(
+        subject='Email for statistics!',
+        message=statistics,
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=['shpresa.avdullaj@fshnstudent.info'],
+    )
+    return "Mail sent!"

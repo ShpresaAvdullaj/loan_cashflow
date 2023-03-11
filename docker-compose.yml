@@ -57,5 +57,17 @@ services:
       - db
 
 
+  celery_beat:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: celery -A core beat -l INFO
+    volumes:
+      - .:/usr/src/app/
+    depends_on:
+      - redis
+      - db
+
+
 volumes:
   postgres_data:
