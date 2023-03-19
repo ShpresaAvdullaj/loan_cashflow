@@ -46,7 +46,6 @@ class LoanViewSet(ViewSet):
         return Response(serializer.data)
 
     @action(detail=False, methods=["GET"])
-    @cache_control(private=True)
     # @method_decorator(cache_page(60), name="statistics")
     def statistics_of_investments(self, request):
         number_of_loans = Loan.objects.all().count()

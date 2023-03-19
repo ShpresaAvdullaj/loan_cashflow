@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'system.db_routing.middleware.SystemMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,7 +53,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+DATABASE_ROUTERS = ['system.db_routing.router.SystemRouter']
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
@@ -76,13 +77,29 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "loan_cashflow",
-        "USER": "postgres",
-        "PASSWORD": "postgres",
-        "HOST": "db",
-        "PORT": "5432",
-    }
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "loan_cashflow",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "HOST": "localhost",
+            "PORT": "5432"
+    },
+    "loan_cashflow_a": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "loan_cashflow_a",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "HOST": "localhost",
+            "PORT": "5432",
+        },
+    "loan_cashflow_b": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "loan_cashflow_b",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+            "HOST": "localhost",
+            "PORT": "5432",
+        }
 }
 
 
